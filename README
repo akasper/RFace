@@ -1,0 +1,49 @@
+You need a new class. Some dev on your team is *insisting* that everyone use
+BDD and RSpec. You're not opposed, except that it takes so much time to 
+figure out where to even begin! "Write a failing spec first?" Easier said
+than done. 
+
+What you really want is to write code. Plain and simple. RSpec should
+facilitate that, not get in the way of it. But here you are, trying to 
+figure out the simplest possible thing you could possibly make this spec
+fail in a way that would actually look like progress. 
+
+Enter: RFace.
+
+
+How to use it:
+
+# "Well, I know I'm going to need a method named..."
+describe InterfaceExample do
+  include InterfaceHelper
+
+  subject {described_class.new}
+
+  implements :some_instance_method, :some_other_instance_method
+  # InterfaceExample defines #some_instance_method, #some_other_instance_method 
+
+  class_implements :some_class_method, :some_other_class_method
+  # InterfaceExample defines .some_class_method, .some_other_class_method
+end
+
+# "I'm probably going to have a simple attribute named..."
+describe AssignmentExample do
+  include AssignmentHelper 
+
+  subject {described_class.new}
+
+  sets :foo => 1, :bar => 2
+  # Verifies that it is possible to assign subject.foo=1 or subject.bar=2 and 
+  #   that value will not change without subsequent assignment.
+end
+
+# "There will probably be an attribute that lives in the DB named..."
+describe PersistenceExample do
+  include PersistenceHelper
+
+  subject {described_class.new}
+
+  persists :foo => 1, :bar => 2
+  # Verifies that subject can be #save'd, #reload'ed, and that #foo will be 1 
+  #   between save and reload, #bar will be 2 between save and reload. 
+end
